@@ -32,12 +32,11 @@ class ApplicationController < ActionController::API
   end
 
   def logged_in?
+    # Double negation forces the return value to be a boolean
     !!logged_in_user
   end
 
   def authorized
-    unless logged_in?
-      render json: { message: 'Please log in' }, status: :unauthorized
-    end
+    render json: { message: 'Please log in' }, status: :unauthorized unless logged_in?
   end
 end
