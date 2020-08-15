@@ -9,7 +9,7 @@ class UsersController < ApplicationController
 
     if @user.valid?
       token = encode_token({ user_id: @user.id })
-      render json: { user: @user.as_json.merge({ token: token, type: @user.type }) }
+      render json: { user: @user.as_json.merge(token: token, type: @user.type) }
     else
       render json: { error: 'Invalid email or password' }
     end
@@ -21,7 +21,7 @@ class UsersController < ApplicationController
     # authenticate is a bcrypt method and compares the params pass with the one stored in the DB
     if @user && @user.authenticate(params[:password])
       token = encode_token({ user_id: @user.id })
-      render json: { user: @user, token: token }
+      render json: { user: @user.as_json.merge(token: token) }
     else
       render json: { error: 'Invalid email or password' }
     end
