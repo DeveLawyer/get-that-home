@@ -6,9 +6,10 @@ class UsersController < ApplicationController
   # REGISTER
   def create
     @user = User.create(user_params)
+
     if @user.valid?
       token = encode_token({ user_id: @user.id })
-      render json: { user: @user, token: token }
+      render json: { user: @user.as_json.merge({ token: token, type: @user.type }) }
     else
       render json: { error: 'Invalid email or password' }
     end
@@ -33,6 +34,6 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.permit(:name, :email, :password, :phone_number, :type)
+    params.require(:user).permit(:name, :email, :password, :phone_number, :type)
   end
 end
