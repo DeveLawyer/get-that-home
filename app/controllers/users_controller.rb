@@ -19,7 +19,7 @@ class UsersController < ApplicationController
   def login
     @user = User.find_by(email: params[:email])
     # authenticate is a bcrypt method and compares the params pass with the one stored in the DB
-    if @user && @user.authenticate(params[:password])
+    if @user&.authenticate(params[:password])
       token = encode_token({ user_id: @user.id })
       render json: { user: @user.as_json.merge(token: token) }
     else
